@@ -1,0 +1,6 @@
+[build]
+    command = "CI=false npm install && npm run build"
+  publish = "build"
+
+[build.environment]
+  SKIP_PREFLIGHT_CHECK = "true"

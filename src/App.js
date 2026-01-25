@@ -11,10 +11,6 @@ export default function MTGLifeCalculator()
     const[players, setPlayers]=useState([]);
     const[gameStarted, setGameStarted]=useState(false);
 
-
-
-
-
     const initializePlayers =()=>
     {
         const newPlayers=[];
@@ -22,12 +18,11 @@ export default function MTGLifeCalculator()
         {
           const player = new Player(startingLife,`Player ${i + 1}`)
           player.numPlayers(numPlayers);
-          numPlayers.push(player);
+          newPlayers.push(player);
 
         }
         setPlayers(newPlayers);
         setGameStarted(true);
-
     };
 
     const updatePlayers=()=>
@@ -37,7 +32,7 @@ export default function MTGLifeCalculator()
 
     const resetGame=()=>
     {
-        gameStarted(false);
+        setGameStarted(false);
         setPlayers([]);
     };
 

@@ -59,6 +59,18 @@ export default function MTGLifeCalculator()
         }
         updatePlayers();
     };
+    const adjustCommanderDamage=(pIndex,opponentIndex,commanderDamage)=>
+    {
+      if(commanderDamage>0)
+      {
+        players[pIndex].takeCommandDmg(commanderDamage,opponentIndex);
+      }
+      else
+      {
+        players[pIndex].removeCommandDmg(Math.abs(commanderDamage), opponentIndex);
+      }
+      updatePlayers();
+    }
 
 
 

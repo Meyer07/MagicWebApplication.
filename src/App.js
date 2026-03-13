@@ -55,7 +55,7 @@ export default function MTGLifeCalculator()
             players[pIndex].takePoison(poison);
         }else
         {
-            players[pIndex].takePoison(Math.abs(poison));
+          players[pIndex].removePoison(Math.abs(poison));
         }
         updatePlayers();
     };
@@ -222,18 +222,34 @@ export default function MTGLifeCalculator()
                   </div>
                 </div>
 
-                {player.commanderDamage?.some(dmg => dmg > 0) && (
-                  <div className="bg-gray-900 rounded-lg p-3">
-                    <div className="text-orange-400 font-semibold text-sm mb-2">Commander Damage</div>
-                    {player.commanderDamage.map((dmg, cmdIndex) => (
-                      dmg > 0 && (
-                        <div key={cmdIndex} className="text-gray-300 text-sm">
-                          P{cmdIndex + 1}: {dmg}
-                        </div>
-                      )
-                    ))}
-                  </div>
-                )}
+                {/* Commander Damage Section */}
+                <div className="bg-gray-900 rounded-lg p-3">
+                  <div className="text-orange-400 font-semibold text-sm mb-2">Commander Damage</div>
+                    <div className="space-y-2">
+                  {player.commanderDamage.map((dmg, cmdIndex) => (
+                      cmdIndex !== index && (
+                      <div key={cmdIndex} className="flex justify-between items-center bg-gray-800 p-2 rounded">
+                      <span className="text-gray-300 text-xs font-medium">From P{cmdIndex + 1}</span>
+                      <div className="flex items-center gap-2">
+                      <button
+                      onClick={() => adjustCommanderDamage(index, cmdIndex, -1)}
+                      className="bg-gray-700 hover:bg-gray-600 text-white px-2 rounded text-xs"
+                      disabled={player.getisDead()}
+            > -       </button>
+                    <span className={`text-sm font-bold ${dmg >= 15 ? 'text-orange-500' : 'text-white'}`}>
+                      {dmg}
+                    </span>
+            <button
+              onClick={() => adjustCommanderDamage(index, cmdIndex, 1)}
+              className="bg-gray-700 hover:bg-gray-600 text-white px-2 rounded text-xs"
+              disabled={player.getisDead()}
+            > + </button>
+          </div>
+        </div>
+      )
+    ))}
+  </div>
+</div>
               </div>
             </div>
           ))}

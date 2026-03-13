@@ -1,4 +1,6 @@
 🛡️ MTG Life Tracker
+
+
 A sleek, modern, and mobile-friendly life-tracking application for Magic: The Gathering players. Designed for Commander (EDH) but flexible enough for any format. This was my first venture into web developement work and how things like node and javascript and React worked, this was in collaboration with Cade Nersveen, he did the backend developement work originally in Java and then I translated it into JS and then did the frontend work and also did a lot of the update work(player name changes,palyer cards having card art)
 -------------------------------------------------------------------------------------------------------------------------------------------------
 ✨ Features

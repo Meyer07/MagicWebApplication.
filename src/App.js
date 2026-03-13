@@ -222,7 +222,7 @@ export default function MTGLifeCalculator()
                   </div>
                 </div>
 
-                {player.commanderDamage.some(dmg => dmg > 0) && (
+                {player.commanderDamage?.some(dmg => dmg > 0) && (
                   <div className="bg-gray-900 rounded-lg p-3">
                     <div className="text-orange-400 font-semibold text-sm mb-2">Commander Damage</div>
                     {player.commanderDamage.map((dmg, cmdIndex) => (

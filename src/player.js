@@ -5,13 +5,13 @@ export class Player
         this.life=startingLife;
         this.name=name;
         this.isDead=false;
-        this.commanderDmg=[];
-        this.poisoncnt=0;
+        this.commanderDamage=[];
+        this.poisoncount=0;
     }
 
     numPlayers(n)
     {
-        this.commanderDmg=new Array(n).fill(0);
+        this.commanderDamage=new Array(n).fill(0);
     }
 
     getLife()
@@ -41,7 +41,7 @@ export class Player
     {
         if(this.isDead)
             return;
-        this.commanderDmg[p]+=cdmg;
+        this.commanderDamage[p]+=cdmg;
         this.takeDmg(cdmg);
     }
 
@@ -49,9 +49,9 @@ export class Player
     {
         if(this.isDead)
             return;
-        this.commanderDmg[p]-=cdmg;
+        this.commanderDamage[p]-=cdmg;
         this.gainLife(cdmg);
-        if(this.commanderDmg[p]<0) this.commanderDmg[p]=0;
+        if(this.commanderDamage[p]<0) this.commanderDmg[p]=0;
     }
     takePoison(pdmg)
     {
@@ -64,10 +64,10 @@ export class Player
     {
         if(this.isDead)
             return;
-        this.poisoncnt-=pdmg;
-        if(this.poisoncnt<0)
+        this.poisoncount-=pdmg;
+        if(this.poisoncount<0)
         {
-            this.poisoncnt=0;
+            this.poisoncount=0;
         }        
     }
     getisDead()
@@ -81,17 +81,17 @@ export class Player
         {
             return;
         }
-        if(this.life<=0 || this.poisoncnt>=10)
+        if(this.life<=0 || this.poisoncount>=10)
         {
             this.isDead=true;
         }
 
         //for loop to check the commander damage stat
-        if(this.commanderDmg && this.commanderDmg.length > 0)
+        if(this.commanderDamage && this.commanderDamage.length > 0)
         {
-            for(let i=0; i<this.commanderDmg.length;i++)
+            for(let i=0; i<this.commanderDamage.length;i++)
                 {
-                    if(this.commanderDmg[i]>=21)
+                    if(this.commanderDamage[i]>=21)
                     {
                         this.isDead=true;
                     }

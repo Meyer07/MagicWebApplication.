@@ -13,6 +13,10 @@ export class Player
     {
         this.commanderDamage=new Array(n).fill(0);
     }
+    setName(newName)
+    {
+        this.name=newName;
+    }
 
     getLife()
     {

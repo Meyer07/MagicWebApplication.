@@ -27,7 +27,12 @@ export default function MTGLifeCalculator()
 
     const updatePlayers=()=>
     {
-        setPlayers([...players]);
+      setPlayers([...players]);
+    };
+    const handleNameChange=(pIndex,name)=>
+    {
+      players[pIndex].setName(name);
+      updatePlayers();
     };
 
     const resetGame=()=>
@@ -70,7 +75,7 @@ export default function MTGLifeCalculator()
         players[pIndex].removeCommandDmg(Math.abs(commanderDamage), opponentIndex);
       }
       updatePlayers();
-    }
+    };
 
 
 
@@ -162,13 +167,20 @@ export default function MTGLifeCalculator()
               }`}
             >
               <div className="text-center mb-4">
-                <h2 className="text-xl font-bold text-white mb-2">{player.getName()}</h2>
+              <input
+                type="text"
+                value={player.getName()}
+                onChange={(e) => handleNameChange(index, e.target.value)}
+                className="bg-transparent text-xl font-bold text-white mb-2 text-center border-b border-transparent hover:border-gray-500 focus:border-orange-500 focus:outline-none transition w-full"
+                placeholder="Enter Name..."
+                disabled={player.getisDead()}
+              />
                 {player.getisDead() && (
-                  <div className="flex items-center justify-center gap-2 text-red-500">
-                    <Skull size={20} />
-                    <span className="font-bold">DEFEATED</span>
-                  </div>
-                )}
+                <div className="flex items-center justify-center gap-2 text-red-500">
+                  <Skull size={20} />
+                  <span className="font-bold">DEFEATED</span>
+                </div>
+  )}
               </div>
 
               <div className="mb-6">

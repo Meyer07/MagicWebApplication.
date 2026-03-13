@@ -95,7 +95,7 @@ export default function MTGLifeCalculator() {
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-4 gap-4">
                     {players.map((player, index) => (
-                        <div key={index} style={{ backgroundImage: player.imageUrl ? `linear-gradient(rgba(31, 41, 55, 0.85), rgba(31, 41, 55, 0.85)), url(${player.imageUrl})` : 'none', backgroundSize: 'cover', backgroundPosition: 'center' }} className={`rounded-xl p-6 shadow-lg border-2 transition ${player.getisDead() ? 'bg-gray-900 border-red-800 opacity-60' : 'bg-gray-800 border-gray-700'}`}>
+                        <div key={index} style={{ backgroundImage: player.imageUrl ? `linear-gradient(rgba(31, 41, 55, 0.5), rgba(31, 41, 55, 0.5)), url(${player.imageUrl})` : 'none', backgroundSize: 'cover', backgroundPosition: 'center' }} className={`rounded-xl p-6 shadow-lg border-2 transition ${player.getisDead() ? 'bg-gray-900 border-red-800 opacity-60' : 'bg-gray-800 border-gray-700'}`}>
                             <div className="text-center mb-4">
                                 <input type="text" placeholder="Search art..." className="w-full bg-gray-900/50 text-[10px] text-white p-1 rounded mb-2" onKeyDown={(e) => e.key === 'Enter' && searchCardArt(index, e.target.value)} />
                                 <input type="text" value={player.name} onChange={(e) => handleNameChange(index, e.target.value)} className="bg-transparent text-xl font-bold text-white text-center w-full" disabled={player.getisDead()} />

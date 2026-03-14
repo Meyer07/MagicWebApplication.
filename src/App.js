@@ -47,13 +47,22 @@ export default function MTGLifeCalculator() {
 
     const searchCardArt = async (pIndex, cardName) => {
         if (!cardName) return;
+
+        const bannedCards=["Invoked Prejudice","Jihad","Crusade","Pradesh Gypsies","Imprison","Cleanse","Stone-Throwing Devils"];
+        if(bannedCards.some(name=>cardName.toLowerCase(includes(name.toLowerCase()))))
+        {
+            alert("This card has been banned for racial/cultural insensitvity");
+            return;
+        }
         try {
             const response = await fetch(`https://api.scryfall.com/cards/named?fuzzy=${encodeURIComponent(cardName)}`);
             const data = await response.json();
-            if (data.image_uris) {
+            if (data.image_uris) 
+            {
                 players[pIndex].imageUrl = data.image_uris.art_crop;
                 updatePlayers();
             }
+            
         } catch (error) { console.error("Search error:", error); }
     };
 

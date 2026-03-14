@@ -49,7 +49,7 @@ export default function MTGLifeCalculator() {
         if (!cardName) return;
 
         const bannedCards=["Invoked Prejudice","Jihad","Crusade","Pradesh Gypsies","Imprison","Cleanse","Stone-Throwing Devils"];
-        if(bannedCards.some(name=>cardName.toLowerCase(includes(name.toLowerCase()))))
+        if(bannedCards.some(name=>cardName.toLowerCase().includes(name.toLowerCase())))
         {
             alert("This card has been banned for racial/cultural insensitvity");
             return;

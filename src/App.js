@@ -29,21 +29,13 @@ export default function MTGLifeCalculator() {
         updatePlayers();
     };
 
-    const adjustCommanderDamage = (pIndex, opponentIndex, amount) => 
-    {
-        if (amount > 0)
-        {
-            players[pIndex].takeCommandDmg(amount, opponentIndex); 
-        } 
-        else 
-        {
-            players[pIndex].removeCommandDmg(Math.abs(amount), opponentIndex);
-        }
+    const adjustCommanderDamage = (pIndex, opponentIndex, amount) => {
+        if (amount > 0) players[pIndex].takeCommandDmg(amount, opponentIndex);
+        else players[pIndex].removeCommandDmg(Math.abs(amount), opponentIndex);
         updatePlayers();
     };
 
-    const handleNameChange = (pIndex, newName) => 
-    {
+    const handleNameChange = (pIndex, newName) => {
         players[pIndex].name = newName;
         updatePlayers();
     };
@@ -55,7 +47,7 @@ export default function MTGLifeCalculator() {
 
     const searchCardArt = async (pIndex, cardName) => {
         if (!cardName) return;
-        const banned = ["Invoke Prejudice", "Jihad", "Crusade", "Imprison", "Cleanse"];
+        const banned = ["Invoke Prejudice", "Jihad", "Crusade", "Pradesh Gypsies", "Imprison", "Cleanse", "Stone-Throwing Devils"];
         if (banned.some(name => cardName.toLowerCase().includes(name.toLowerCase()))) {
             alert("Restricted Art");
             return;
@@ -73,26 +65,23 @@ export default function MTGLifeCalculator() {
     if (!gameStarted) {
         return (
             <div className="min-h-screen bg-gray-900 flex items-center justify-center p-6 text-white">
-                <div className="bg-gray-800 p-8 rounded-2xl border border-gray-700 w-full max-w-sm shadow-2xl">
-                    <h1 className="text-3xl font-black mb-8 text-center text-orange-500 tracking-tighter">Magic The Gathering Life Tracker</h1>
-                    
+                <div className="bg-gray-800 p-8 rounded-2xl border border-gray-700 w-full max-w-sm">
+                    <h1 className="text-3xl font-black mb-8 text-center text-orange-500 tracking-tighter uppercase">MTG Tracker</h1>
                     <div className="space-y-10">
                         <div className="text-center">
                             <label className="block mb-4 text-xs font-bold text-gray-400 uppercase tracking-widest">Players</label>
                             <div className="flex items-center justify-between px-4">
-                                <button onClick={() => setNumPlayers(Math.max(2, numPlayers - 1))} className="p-4 bg-gray-700 rounded-full active:scale-95"><Minus /></button>
+                                <button onClick={() => setNumPlayers(Math.max(2, numPlayers - 1))} className="p-4 bg-gray-700 rounded-full active:scale-95 transition-transform"><Minus /></button>
                                 <span className="text-5xl font-black">{numPlayers}</span>
-                                <button onClick={() => setNumPlayers(Math.min(8, numPlayers + 1))} className="p-4 bg-gray-700 rounded-full active:scale-95"><Plus /></button>
+                                <button onClick={() => setNumPlayers(Math.min(8, numPlayers + 1))} className="p-4 bg-gray-700 rounded-full active:scale-95 transition-transform"><Plus /></button>
                             </div>
                         </div>
-
                         <div className="flex gap-3">
                             {[20, 30, 40].map(val => (
-                                <button key={val} onClick={() => setStartingLife(val)} className={`flex-1 py-4 rounded-xl font-bold ${startingLife === val ? 'bg-orange-600' : 'bg-gray-700'}`}>{val}</button>
+                                <button key={val} onClick={() => setStartingLife(val)} className={`flex-1 py-4 rounded-xl font-bold transition-colors ${startingLife === val ? 'bg-orange-600' : 'bg-gray-700'}`}>{val}</button>
                             ))}
                         </div>
-
-                        <button onClick={initializePlayers} className="w-full bg-green-600 py-5 rounded-2xl font-black text-xl shadow-lg active:bg-green-500">START MATCH</button>
+                        <button onClick={initializePlayers} className="w-full bg-green-600 py-5 rounded-2xl font-black text-xl shadow-lg active:bg-green-500 transition-colors">START MATCH</button>
                     </div>
                 </div>
             </div>
@@ -102,8 +91,8 @@ export default function MTGLifeCalculator() {
     return (
         <div className="min-h-screen bg-gray-950 text-white pb-20 font-sans">
             <div className="sticky top-0 z-50 bg-gray-950/80 backdrop-blur-md border-b border-white/5 p-4 flex justify-between items-center mb-4">
-                <h2 className="font-bold text-xs tracking-widest text-gray-400 uppercase">MTG Tracker</h2>
-                <button onClick={resetGame} className="bg-gray-800 px-4 py-2 rounded-lg text-xs font-bold uppercase"><RotateCcw size={14} className="inline mr-1"/> Reset</button>
+                <h2 className="font-bold text-xs tracking-widest text-gray-400 uppercase">Magic The Gathering</h2>
+                <button onClick={resetGame} className="bg-gray-800 px-4 py-2 rounded-lg text-xs flex items-center gap-2 font-bold"><RotateCcw size={14}/> RESET</button>
             </div>
 
             <div className="max-w-7xl mx-auto px-4">
@@ -116,11 +105,11 @@ export default function MTGLifeCalculator() {
                             <input 
                                 type="text" placeholder="Search art..." 
                                 onKeyDown={(e) => e.key === 'Enter' && searchCardArt(index, e.target.value)}
-                                className="w-full bg-black/40 p-3 rounded-xl text-base mb-4 border border-white/5"
+                                className="w-full bg-black/40 p-3 rounded-xl text-base mb-4 focus:outline-none border border-white/5"
                             />
 
                             <div className="text-center mb-4">
-                                <input value={player.name} onChange={(e) => handleNameChange(index, e.target.value)} className="bg-transparent text-center font-bold text-xl w-full border-b border-white/10" />
+                                <input value={player.name} onChange={(e) => handleNameChange(index, e.target.value)} className="bg-transparent text-center font-bold text-xl w-full border-b border-white/10 focus:outline-none" />
                                 {player.isDead && <div className="text-red-500 text-xs font-bold mt-1 uppercase flex justify-center items-center gap-1"><Skull size={14}/> Defeated</div>}
                             </div>
 
@@ -128,22 +117,22 @@ export default function MTGLifeCalculator() {
                                 <span className="text-7xl font-black block mb-6 tracking-tighter tabular-nums">{player.life}</span>
                                 <div className="flex gap-2 h-16">
                                     <button onClick={() => adjustLife(index, -5)} className="flex-1 bg-red-900/40 rounded-xl font-bold">-5</button>
-                                    <button onClick={() => adjustLife(index, -1)} className="flex-1 bg-gray-800 rounded-xl font-bold">-1</button>
-                                    <button onClick={() => adjustLife(index, 1)} className="flex-1 bg-orange-600 rounded-xl font-bold">+1</button>
+                                    <button onClick={() => adjustLife(index, -1)} className="flex-1 bg-gray-800 rounded-xl font-bold text-lg">-1</button>
+                                    <button onClick={() => adjustLife(index, 1)} className="flex-1 bg-orange-600 rounded-xl font-bold text-lg">+1</button>
                                     <button onClick={() => adjustLife(index, 5)} className="flex-1 bg-green-900/40 rounded-xl font-bold">+5</button>
                                 </div>
                             </div>
 
-                            {/* DISPLAY SECTION FOR COMMANDER DAMAGE (ADDED BACK) */}
+                            {/* Commander Damage Display (Restored) */}
                             <div className="space-y-2 mb-4">
-                                {player.commanderDamage.map((dmg, sourceIdx) => (
+                                {player.commanderDamage && player.commanderDamage.map((dmg, sourceIdx) => (
                                     sourceIdx !== index && dmg > 0 && (
                                         <div key={sourceIdx} className="flex justify-between items-center bg-black/40 p-3 rounded-xl border border-white/5">
                                             <span className="text-[10px] font-bold text-gray-400 uppercase">From P{sourceIdx + 1}</span>
                                             <div className="flex items-center gap-4">
-                                                <button onClick={() => adjustCommanderDamage(index, sourceIdx, -1)} className="p-1 active:scale-150 text-red-400"><Minus size={16}/></button>
-                                                <span className="font-black text-orange-500 text-lg">{dmg}</span>
-                                                <button onClick={() => adjustCommanderDamage(index, sourceIdx, 1)} className="p-1 active:scale-150 text-green-400"><Plus size={16}/></button>
+                                                <button onClick={() => adjustCommanderDamage(index, sourceIdx, -1)} className="p-1 active:scale-150 text-red-400 transition-transform"><Minus size={16}/></button>
+                                                <span className="font-black text-orange-500 text-lg tabular-nums">{dmg}</span>
+                                                <button onClick={() => adjustCommanderDamage(index, sourceIdx, 1)} className="p-1 active:scale-150 text-green-400 transition-transform"><Plus size={16}/></button>
                                             </div>
                                         </div>
                                     )
@@ -173,12 +162,12 @@ export default function MTGLifeCalculator() {
                                 <ShieldAlert size={16}/> Manage Counters
                             </button>
 
-                            {/* Overlay Menu */}
+                            {/* Overlay Menu for Mobile */}
                             {activeMenu === index && (
-                                <div className="absolute inset-0 z-50 bg-gray-900/95 p-6 rounded-3xl grid grid-cols-2 gap-3 animate-in fade-in zoom-in duration-200">
+                                <div className="absolute inset-0 z-50 bg-gray-900/95 p-6 rounded-3xl grid grid-cols-2 gap-3 animate-in fade-in zoom-in duration-200 overflow-y-auto">
                                     <button onClick={() => setActiveMenu(null)} className="col-span-2 text-xs font-bold text-gray-500 mb-2 uppercase tracking-widest">Close Menu</button>
                                     {Object.keys(player.counters).map(type => (
-                                        <button key={type} onClick={() => { handleCounterChange(index, type, 1); setActiveMenu(null); }} className="bg-gray-800 p-4 rounded-xl text-[10px] font-bold uppercase">{type}</button>
+                                        <button key={type} onClick={() => { handleCounterChange(index, type, 1); setActiveMenu(null); }} className="bg-gray-800 p-4 rounded-xl text-[10px] font-bold uppercase text-white">{type}</button>
                                     ))}
                                     {players.map((_, oppIdx) => (
                                         oppIdx !== index && (

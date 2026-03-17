@@ -106,7 +106,8 @@ export default function MTGLifeCalculator() {
                     {players.map((player, index) => (
                         <div key={index} 
                              style={{ backgroundImage: player.imageUrl ? `linear-gradient(rgba(17, 24, 39, 0.85), rgba(17, 24, 39, 0.95)), url(${player.imageUrl})` : 'none', backgroundSize: 'cover', backgroundPosition: 'center' }}
-                             className={`relative p-5 rounded-3xl border-2 transition-all ${player.isDead ? 'border-red-900 opacity-50' : 'border-gray-800 bg-gray-900'}`}>
+                             className={`relative p-5 rounded-3xl border-2 transition-all min-h-fit h-auto flex flex-col justify-between ${player.isDead ? 'border-red-900 opacity-50' : 'border-gray-800 bg-gray-900'}`}
+                             >
                             
                             <input 
                                 type="text" placeholder="Search art..." 

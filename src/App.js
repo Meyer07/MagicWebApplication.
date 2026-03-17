@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Plus, Minus, Skull, RotateCcw } from 'lucide-react';
+import { Plus, Minus, Skull, RotateCcw, ShieldAlert } from 'lucide-react';
 import { Player } from './player';
 
 export default function MTGLifeCalculator() {

@@ -6,7 +6,7 @@ export class Player
         this.name=name;
         this.isDead=false;
         this.commanderDamage=[];
-        this.poisoncount=0;
+        this.poisonCount=0;
     }
 
     numPlayers(n)
@@ -61,17 +61,17 @@ export class Player
     {
         if(this.isDead)
             return;
-        this.poisoncnt+=pdmg;
+        this.poisonCount+=pdmg;
         this.checkLoss();
     }
     removePoison(pdmg)
     {
         if(this.isDead)
             return;
-        this.poisoncount-=pdmg;
-        if(this.poisoncount<0)
+        this.poisonCount-=pdmg;
+        if(this.poisonCount<0)
         {
-            this.poisoncount=0;
+            this.poisonCount=0;
         }        
     }
     getisDead()
@@ -85,7 +85,7 @@ export class Player
         {
             return;
         }
-        if(this.life<=0 || this.poisoncount>=10)
+        if(this.life<=0 || this.poisonCount>=10)
         {
             this.isDead=true;
         }

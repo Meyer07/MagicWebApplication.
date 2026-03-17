@@ -6,7 +6,15 @@ export class Player
         this.name=name;
         this.isDead=false;
         this.commanderDamage=[];
-        this.poisonCount=0;
+        this.imageURL="";
+        this.counters={
+            poison:0,
+            experience:0,
+            energy:0,
+            tickets:0,
+            rads:0,
+            boon:0,
+        }
     }
 
     numPlayers(n)
@@ -57,22 +65,18 @@ export class Player
         this.gainLife(cdmg);
         if(this.commanderDamage[p]<0) this.commanderDmg[p]=0;
     }
-    takePoison(pdmg)
+    adjustCounter(type,amount)
     {
-        if(this.isDead)
-            return;
-        this.poisonCount+=pdmg;
-        this.checkLoss();
-    }
-    removePoison(pdmg)
-    {
-        if(this.isDead)
-            return;
-        this.poisonCount-=pdmg;
-        if(this.poisonCount<0)
+        if(this.isDead())
         {
-            this.poisonCount=0;
-        }        
+            return;
+        }
+        this.counters[type]+=amount;
+        if(this.counters[type]<0)
+        {
+            this.counters[type]=0;
+        }
+        this.checkLoss();
     }
     getisDead()
     {
@@ -85,7 +89,7 @@ export class Player
         {
             return;
         }
-        if(this.life<=0 || this.poisonCount>=10)
+        if(this.life<=0 || this.counters.poison>=10)
         {
             this.isDead=true;
         }

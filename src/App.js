@@ -7,6 +7,7 @@ export default function MTGLifeCalculator() {
     const [startingLife, setStartingLife] = useState(40);
     const [players, setPlayers] = useState([]);
     const [gameStarted, setGameStarted] = useState(false);
+    const [activeMenu,setActiveMenu]=useState(null);
 
     const initializePlayers = () => {
         const newPlayers = [];
@@ -25,12 +26,6 @@ export default function MTGLifeCalculator() {
     const adjustLife = (pIndex, life) => {
         if (life > 0) players[pIndex].gainLife(life);
         else players[pIndex].takeDmg(Math.abs(life));
-        updatePlayers();
-    };
-
-    const adjustPoison = (pIndex, poison) => {
-        if (poison > 0) players[pIndex].takePoison(poison);
-        else players[pIndex].removePoison(Math.abs(poison));
         updatePlayers();
     };
 
@@ -65,30 +60,28 @@ export default function MTGLifeCalculator() {
             
         } catch (error) { console.error("Search error:", error); }
     };
+    const handleCounterChange=(pIndex,type,amount)=>
+    {
+        players[pIndex].adjustCounter(type,amount);
+        updatePlayers();
+    }
 
     if (!gameStarted) {
         return (
-            <div className="min-h-screen bg-gradient-to-br from-gray-900 to-gray-800 flex items-center justify-center p-4">
-                <div className="bg-gray-800 rounded-xl shadow-2xl p-8 max-w-md w-full border border-gray-700">
-                    <h1 className="text-4xl font-bold text-center mb-8 text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-red-500">MTG Life Calculator</h1>
+            <div className="min-h-screen bg-gray-900 flex items-center justify-center p-4 text-white">
+                <div className="bg-gray-800 p-8 rounded-xl border border-gray-700 w-full max-w-md">
+                    <h1 className="text-3xl font-bold mb-6 text-center text-orange-500">MTG Life Tracker</h1>
                     <div className="space-y-6">
                         <div>
-                            <label className="block text-gray-300 mb-2 font-semibold">Number of Players</label>
-                            <div className="flex items-center gap-4">
-                                <button onClick={() => setNumPlayers(Math.max(2, numPlayers - 1))} className="bg-gray-700 text-white p-3 rounded-lg"><Minus size={20} /></button>
-                                <span className="text-3xl font-bold text-white flex-1 text-center">{numPlayers}</span>
-                                <button onClick={() => setNumPlayers(Math.min(8, numPlayers + 1))} className="bg-gray-700 text-white p-3 rounded-lg"><Plus size={20} /></button>
-                            </div>
+                            <label className="block mb-2">Players: {numPlayers}</label>
+                            <input type="range" min="2" max="6" value={numPlayers} onChange={(e) => setNumPlayers(parseInt(e.target.value))} className="w-full" />
                         </div>
-                        <div>
-                            <label className="block text-gray-300 mb-2 font-semibold">Starting Life</label>
-                            <div className="flex gap-2">
-                                {[20, 30, 40].map(life => (
-                                    <button key={life} onClick={() => setStartingLife(life)} className={`flex-1 py-3 rounded-lg font-bold ${startingLife === life ? 'bg-orange-500 text-white' : 'bg-gray-700 text-gray-300'}`}>{life}</button>
-                                ))}
-                            </div>
+                        <div className="flex gap-2">
+                            {[20, 30, 40].map(val => (
+                                <button key={val} onClick={() => setStartingLife(val)} className={`flex-1 p-2 rounded ${startingLife === val ? 'bg-orange-600' : 'bg-gray-700'}`}>{val}</button>
+                            ))}
                         </div>
-                        <button onClick={initializePlayers} className="w-full bg-orange-600 text-white font-bold py-4 rounded-lg shadow-lg">Start Game</button>
+                        <button onClick={initializePlayers} className="w-full bg-green-600 p-3 rounded font-bold">Start Game</button>
                     </div>
                 </div>
             </div>
@@ -96,54 +89,113 @@ export default function MTGLifeCalculator() {
     }
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-gray-900 to-gray-800 p-4">
-            <div className="max-w-6xl mx-auto">
+        <div className="min-h-screen bg-gray-950 p-4 text-white">
+            <div className="max-w-7xl mx-auto">
                 <div className="flex justify-between items-center mb-6">
-                    <h1 className="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-red-500">MTG Life Tracker</h1>
-                    <button onClick={resetGame} className="bg-gray-700 text-white px-4 py-2 rounded-lg flex items-center gap-2"><RotateCcw size={18} /> New Game</button>
+                    <h2 className="text-xl font-bold">EDH Tracker</h2>
+                    <button onClick={resetGame} className="flex items-center gap-2 bg-gray-800 px-4 py-2 rounded text-sm"><RotateCcw size={16}/> Reset</button>
                 </div>
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-4 gap-4">
+
+                <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
                     {players.map((player, index) => (
-                        <div key={index} style={{ backgroundImage: player.imageUrl ? `linear-gradient(rgba(31, 41, 55, 0.5), rgba(31, 41, 55, 0.5)), url(${player.imageUrl})` : 'none', backgroundSize: 'cover', backgroundPosition: 'center' }} className={`rounded-xl p-6 shadow-lg border-2 transition ${player.getisDead() ? 'bg-gray-900 border-red-800 opacity-60' : 'bg-gray-800 border-gray-700'}`}>
+                        <div key={index} 
+                             style={{ 
+                                backgroundImage: player.imageUrl ? `linear-gradient(rgba(17, 24, 39, 0.8), rgba(17, 24, 39, 0.9)), url(${player.imageUrl})` : 'none',
+                                backgroundSize: 'cover', backgroundPosition: 'center'
+                             }}
+                             className={`relative p-6 rounded-2xl border-2 transition-all ${player.isDead ? 'border-red-900 opacity-60 bg-gray-900' : 'border-gray-800 bg-gray-900'}`}>
+                            
+                            {/* Art Search */}
+                            <input 
+                                type="text" 
+                                placeholder="Search card art..." 
+                                onKeyDown={(e) => e.key === 'Enter' && searchCardArt(index, e.target.value)}
+                                className="w-full bg-black/40 p-2 rounded text-xs mb-4 focus:outline-none border border-white/10"
+                            />
+
+                            {/* Name & Status */}
                             <div className="text-center mb-4">
-                                <input type="text" placeholder="Search art..." className="w-full bg-gray-900/50 text-[10px] text-white p-1 rounded mb-2" onKeyDown={(e) => e.key === 'Enter' && searchCardArt(index, e.target.value)} />
-                                <input type="text" value={player.name} onChange={(e) => handleNameChange(index, e.target.value)} className="bg-transparent text-xl font-bold text-white text-center w-full" disabled={player.getisDead()} />
-                                {player.getisDead() && <div className="flex items-center justify-center gap-2 text-red-500 mt-1"><Skull size={18} /><span className="text-xs font-bold">DEFEATED</span></div>}
+                                <input value={player.name} onChange={(e) => handleNameChange(index, e.target.value)} className="bg-transparent text-center font-bold text-xl w-full border-b border-white/10" />
+                                {player.isDead && <div className="text-red-500 text-xs font-bold mt-1 flex justify-center items-center gap-1"><Skull size={14}/> DEFEATED</div>}
                             </div>
-                            <div className="mb-6 text-center">
-                                <div className="text-5xl font-bold text-white mb-3">{player.getLife()}</div>
+
+                            {/* Life Total */}
+                            <div className="text-center mb-6">
+                                <span className="text-6xl font-black block mb-4">{player.life}</span>
                                 <div className="flex gap-2">
-                                    <button onClick={() => adjustLife(index, -1)} className="flex-1 bg-red-600 p-2 rounded-lg text-white">-1</button>
-                                    <button onClick={() => adjustLife(index, -5)} className="flex-1 bg-red-800 p-2 rounded-lg text-white">-5</button>
-                                    <button onClick={() => adjustLife(index, 1)} className="flex-1 bg-green-600 p-2 rounded-lg text-white">+1</button>
-                                    <button onClick={() => adjustLife(index, 5)} className="flex-1 bg-green-800 p-2 rounded-lg text-white">+5</button>
+                                    <button onClick={() => adjustLife(index, -5)} className="flex-1 bg-red-900/50 p-2 rounded hover:bg-red-800 transition">-5</button>
+                                    <button onClick={() => adjustLife(index, -1)} className="flex-1 bg-red-700/50 p-2 rounded hover:bg-red-600 transition">-1</button>
+                                    <button onClick={() => adjustLife(index, 1)} className="flex-1 bg-green-700/50 p-2 rounded hover:bg-green-600 transition">+1</button>
+                                    <button onClick={() => adjustLife(index, 5)} className="flex-1 bg-green-900/50 p-2 rounded hover:bg-green-800 transition">+5</button>
                                 </div>
                             </div>
-                            <div className="space-y-3">
-                                <div className="bg-gray-900/80 rounded-lg p-3">
-                                    <div className="flex justify-between items-center mb-2"><span className="text-purple-400 text-xs font-semibold">Poison</span><span className="text-white font-bold">{player.poisonCount}</span></div>
-                                    <div className="flex gap-2">
-                                        <button onClick={() => adjustPoison(index, -1)} className="flex-1 bg-purple-900 p-1 rounded text-xs text-white">-1</button>
-                                        <button onClick={() => adjustPoison(index, 1)} className="flex-1 bg-purple-700 p-1 rounded text-xs text-white">+1</button>
-                                    </div>
-                                </div>
-                                <div className="bg-gray-900/80 rounded-lg p-3">
-                                    <div className="text-orange-400 text-xs font-semibold mb-2">Commander Damage</div>
-                                    <div className="space-y-2">
-                                        {player.commanderDamage.map((dmg, cmdIndex) => (
-                                            cmdIndex !== index && (
-                                                <div key={cmdIndex} className="flex justify-between items-center bg-gray-800/50 p-1 rounded">
-                                                    <span className="text-gray-400 text-[10px]">From P{cmdIndex + 1}</span>
-                                                    <div className="flex items-center gap-2">
-                                                        <button onClick={() => adjustCommanderDamage(index, cmdIndex, -1)} className="bg-gray-700 text-white px-1.5 rounded text-[10px]">-</button>
-                                                        <span className="text-white text-xs font-bold">{dmg}</span>
-                                                        <button onClick={() => adjustCommanderDamage(index, cmdIndex, 1)} className="bg-gray-700 text-white px-1.5 rounded text-[10px]">+</button>
-                                                    </div>
-                                                </div>
+
+                            {/* DYNAMIC COUNTER PILLS (Only shows when > 0) */}
+                            <div className="flex flex-wrap gap-2 mb-4 min-h-[32px]">
+                                {Object.entries(player.counters).map(([type, count]) => (
+                                    count > 0 && (
+                                        <div key={type} className="flex items-center gap-2 bg-purple-900/40 border border-purple-500/50 px-3 py-1 rounded-full animate-in fade-in zoom-in duration-300">
+                                            <span className="text-[10px] font-bold uppercase tracking-wider">{type}</span>
+                                            <span className="font-bold">{count}</span>
+                                            <div className="flex gap-2 ml-1 border-l border-white/20 pl-2">
+                                                <button onClick={() => handleCounterChange(index, type, -1)} className="hover:text-red-400 font-bold">-</button>
+                                                <button onClick={() => handleCounterChange(index, type, 1)} className="hover:text-green-400 font-bold">+</button>
+                                            </div>
+                                        </div>
+                                    )
+                                ))}
+                            </div>
+
+                            {/* Commander Damage Display */}
+                            <div className="space-y-2 mb-4">
+                                {player.commanderDamage.map((dmg, sourceIdx) => (
+                                    sourceIdx !== index && dmg > 0 && (
+                                        <div key={sourceIdx} className="flex justify-between items-center text-xs bg-black/30 p-2 rounded">
+                                            <span className="text-gray-400 uppercase">From P{sourceIdx + 1}</span>
+                                            <div className="flex items-center gap-3">
+                                                <button onClick={() => adjustCommanderDamage(index, sourceIdx, -1)} className="text-gray-500 hover:text-white">-</button>
+                                                <span className="font-bold text-orange-400">{dmg}</span>
+                                                <button onClick={() => adjustCommanderDamage(index, sourceIdx, 1)} className="text-gray-500 hover:text-white">+</button>
+                                            </div>
+                                        </div>
+                                    )
+                                ))}
+                            </div>
+
+                            {/* ADD COUNTER MENU */}
+                            <div className="relative">
+                                <button 
+                                    onClick={() => setActiveMenu(activeMenu === index ? null : index)}
+                                    className="w-full bg-gray-800/80 hover:bg-gray-700 py-2 rounded text-[10px] uppercase font-bold tracking-widest flex items-center justify-center gap-2"
+                                >
+                                    <ShieldAlert size={12}/> Manage Counters
+                                </button>
+                                
+                                {activeMenu === index && (
+                                    <div className="absolute bottom-full mb-2 left-0 w-full bg-gray-800 border border-gray-600 rounded-lg shadow-2xl p-2 z-50 grid grid-cols-2 gap-2 animate-in slide-in-from-bottom-2">
+                                        {Object.keys(player.counters).map(type => (
+                                            <button 
+                                                key={type}
+                                                onClick={() => { handleCounterChange(index, type, 1); setActiveMenu(null); }}
+                                                className="bg-gray-700 hover:bg-purple-700 p-2 rounded text-[10px] uppercase font-bold"
+                                            >
+                                                {type}
+                                            </button>
+                                        ))}
+                                        {/* Dynamic Opponent Commander Damage Buttons */}
+                                        {players.map((_, oppIdx) => (
+                                            oppIdx !== index && (
+                                                <button 
+                                                    key={oppIdx}
+                                                    onClick={() => { adjustCommanderDamage(index, oppIdx, 1); setActiveMenu(null); }}
+                                                    className="bg-gray-700 hover:bg-orange-700 p-2 rounded text-[10px] uppercase font-bold"
+                                                >
+                                                    Cmdr Dmg (P{oppIdx + 1})
+                                                </button>
                                             )
                                         ))}
                                     </div>
-                                </div>
+                                )}
                             </div>
                         </div>
                     ))}

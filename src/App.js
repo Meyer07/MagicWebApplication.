@@ -70,7 +70,7 @@ export default function MTGLifeCalculator() {
         return (
             <div className="min-h-screen bg-gray-900 flex items-center justify-center p-4 text-white">
                 <div className="bg-gray-800 p-8 rounded-xl border border-gray-700 w-full max-w-md">
-                    <h1 className="text-3xl font-bold mb-6 text-center text-orange-500">MTG Life Tracker</h1>
+                    <h1 className="text-3xl font-bold mb-6 text-center text-orange-500">Magic The Gathering Life Tracker</h1>
                     <div className="space-y-6">
                         {/* Player Selection with Plus and Minus */}
                         <div className="text-center">

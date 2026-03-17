@@ -60,10 +60,15 @@ export class Player
     removeCommandDmg(cdmg,p)
     {
         if(this.isDead)
+        {
             return;
+        }
         this.commanderDamage[p]-=cdmg;
         this.gainLife(cdmg);
-        if(this.commanderDamage[p]<0) this.commanderDamage[p]=0;
+        if(this.commanderDamage[p]<0)
+        {
+            this.commanderDamage[p]=0;
+        } 
     }
     adjustCounter(type,amount)
     {

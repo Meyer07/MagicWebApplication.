@@ -20,7 +20,13 @@ export default function MTGLifeCalculator() {
         setGameStarted(true);
     };
 
-    const updatePlayers = () => setPlayers([...players]);
+    const updatePlayers = () => 
+    {
+        setPlayers(players.map(p => 
+        {
+            return Object.assign(Object.create(Object.getPrototypeOf(p)), p);
+        }));
+    };
     const resetGame = () => { setGameStarted(false); setPlayers([]); setActiveMenu(null); };
 
     const adjustLife = (pIndex, life) => {
@@ -66,7 +72,7 @@ export default function MTGLifeCalculator() {
         return (
             <div className="min-h-screen bg-gray-900 flex items-center justify-center p-6 text-white">
                 <div className="bg-gray-800 p-8 rounded-2xl border border-gray-700 w-full max-w-sm">
-                    <h1 className="text-3xl font-black mb-8 text-center text-orange-500 tracking-tighter uppercase">MTG Tracker</h1>
+                    <h1 className="text-3xl font-black mb-8 text-center text-orange-500 tracking-tighter uppercase">Magic The Gathering Life Tracker</h1>
                     <div className="space-y-10">
                         <div className="text-center">
                             <label className="block mb-4 text-xs font-bold text-gray-400 uppercase tracking-widest">Players</label>
@@ -91,7 +97,7 @@ export default function MTGLifeCalculator() {
     return (
         <div className="min-h-screen bg-gray-950 text-white pb-20 font-sans">
             <div className="sticky top-0 z-50 bg-gray-950/80 backdrop-blur-md border-b border-white/5 p-4 flex justify-between items-center mb-4">
-                <h2 className="font-bold text-xs tracking-widest text-gray-400 uppercase">Magic The Gathering</h2>
+                <h2 className="font-bold text-xs tracking-widest text-gray-400 uppercase">Magic The Gathering Life Tracker</h2>
                 <button onClick={resetGame} className="bg-gray-800 px-4 py-2 rounded-lg text-xs flex items-center gap-2 font-bold"><RotateCcw size={14}/> RESET</button>
             </div>
 
@@ -166,11 +172,14 @@ export default function MTGLifeCalculator() {
                             {activeMenu === index && (
                                 <div className="absolute inset-0 z-50 bg-gray-900/95 p-6 rounded-3xl grid grid-cols-2 gap-3 animate-in fade-in zoom-in duration-200 overflow-y-auto">
                                     <button onClick={() => setActiveMenu(null)} className="col-span-2 text-xs font-bold text-gray-500 mb-2 uppercase tracking-widest">Close Menu</button>
-                                    {Object.keys(player.counters).map(type => (
+                                    {Object.keys(player.counters).map(type => 
+                                    (
                                         <button key={type} onClick={() => { handleCounterChange(index, type, 1); setActiveMenu(null); }} className="bg-gray-800 p-4 rounded-xl text-[10px] font-bold uppercase text-white">{type}</button>
                                     ))}
-                                    {players.map((_, oppIdx) => (
-                                        oppIdx !== index && (
+                                    {players.map((_, oppIdx) => 
+                                    (
+                                        oppIdx !== index && 
+                                        (
                                             <button key={oppIdx} onClick={() => { adjustCommanderDamage(index, oppIdx, 1); setActiveMenu(null); }} className="bg-orange-900/20 text-orange-400 border border-orange-500/20 p-4 rounded-xl text-[10px] font-bold uppercase">P{oppIdx + 1} Dmg</button>
                                         )
                                     ))}

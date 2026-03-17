@@ -107,6 +107,7 @@ export class Player
                     if(this.commanderDamage[i]>=21)
                     {
                         this.isDead=true;
+                        break;
                     }
                 }
         }

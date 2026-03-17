@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Plus, Minus, Skull, RotateCcw, ShieldAlert } from 'lucide-react';
+import { Skull, RotateCcw, ShieldAlert } from 'lucide-react';
 import { Player } from './player';
 
 export default function MTGLifeCalculator() {
@@ -21,7 +21,7 @@ export default function MTGLifeCalculator() {
     };
 
     const updatePlayers = () => setPlayers([...players]);
-    const resetGame = () => { setGameStarted(false); setPlayers([]); };
+    const resetGame = () => { setGameStarted(false); setPlayers([]); setActiveMenu(null); };
 
     const adjustLife = (pIndex, life) => {
         if (life > 0) players[pIndex].gainLife(life);

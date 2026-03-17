@@ -217,7 +217,7 @@ export default function MTGLifeCalculator() {
                                                     onClick={() => { adjustCommanderDamage(index, oppIdx, 1); setActiveMenu(null); }}
                                                     className="bg-gray-700 hover:bg-orange-700 p-2 rounded text-[10px] uppercase font-bold transition text-white"
                                                 >
-                                                    Commander Dmg (P{oppIdx + 1})
+                                                    Commander Damage (P{oppIdx + 1})
                                                 </button>
                                             )
                                         ))}

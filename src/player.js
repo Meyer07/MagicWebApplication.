@@ -67,7 +67,7 @@ export class Player
     }
     adjustCounter(type,amount)
     {
-        if(this.isDead())
+        if(this.isDead)
         {
             return;
         }

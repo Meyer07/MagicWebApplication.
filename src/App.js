@@ -160,6 +160,32 @@ export default function MTGLifeCalculator() {
                                     )
                                 ))}
                             </div>
+                            <div className="space-y-2 mb-4">
+                                {player.commanderDamage && player.commanderDamage.map((dmg, sourceIdx) => (
+                                    sourceIdx !== index && dmg > 0 && (
+                                    <div key={sourceIdx} className="flex justify-between items-center text-xs bg-black/30 p-3 rounded-xl border border-white/5 shadow-inner">
+                                    <span className="text-gray-400 font-bold uppercase tracking-tighter">
+                                    From Player {sourceIdx + 1}
+                                    </span>
+                                    <div className="flex items-center gap-4">
+                                        <button 
+                                            onClick={() => adjustCommanderDamage(index, sourceIdx, -1)} 
+                                            className="text-red-400 font-black p-2 active:scale-125 transition-transform"
+                                        >
+                                        <Minus size={16} />
+                                        </button>
+                                    <span className="font-black text-orange-500 text-lg tabular-nums">{dmg}</span>
+                                    <button 
+                                        onClick={() => adjustCommanderDamage(index, sourceIdx, 1)} 
+                                        className="text-green-400 font-black p-2 active:scale-125 transition-transform"
+                                    >
+                                        <Plus size={16} />
+                                    </button>
+                                </div>
+                            </div>
+                        )
+                    ))}
+                </div>
 
                             <button 
                                 onClick={() => setActiveMenu(activeMenu === index ? null : index)}

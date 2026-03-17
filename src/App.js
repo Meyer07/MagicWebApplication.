@@ -100,49 +100,54 @@ export default function MTGLifeCalculator() {
     }
 
     return (
-        <div className="min-h-screen bg-gray-950 text-white pb-20">
-            {/* Sticky Header for easy reset on mobile */}
+        <div className="min-h-screen bg-gray-950 text-white pb-20 font-sans">
             <div className="sticky top-0 z-50 bg-gray-950/80 backdrop-blur-md border-b border-white/5 p-4 flex justify-between items-center mb-4">
-                <h2 className="font-bold text-sm tracking-tight text-gray-400">Magic The Gathering Life Tracker</h2>
-                <button onClick={resetGame} className="bg-gray-800 px-4 py-2 rounded-lg text-xs flex items-center gap-2 font-bold"><RotateCcw size={14}/> RESET</button>
+                <h2 className="font-bold text-xs tracking-widest text-gray-400 uppercase">MTG Tracker</h2>
+                <button onClick={resetGame} className="bg-gray-800 px-4 py-2 rounded-lg text-xs font-bold uppercase"><RotateCcw size={14} className="inline mr-1"/> Reset</button>
             </div>
 
             <div className="max-w-7xl mx-auto px-4">
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                     {players.map((player, index) => (
                         <div key={index} 
-                             style={{ backgroundImage: player.imageUrl ? `linear-gradient(rgba(17, 24, 39, 0.85), rgba(17, 24, 39, 0.95)), url(${player.imageUrl})` : 'none', backgroundSize: 'cover' }}
+                             style={{ backgroundImage: player.imageUrl ? `linear-gradient(rgba(17, 24, 39, 0.85), rgba(17, 24, 39, 0.95)), url(${player.imageUrl})` : 'none', backgroundSize: 'cover', backgroundPosition: 'center' }}
                              className={`relative p-5 rounded-3xl border-2 transition-all ${player.isDead ? 'border-red-900 opacity-50' : 'border-gray-800 bg-gray-900'}`}>
                             
-                            <div className="text-center mb-4">
-                                <input 
-                                    value={player.name} 
-                                    onChange={(e) => handleNameChange(index, e.target.value)} 
-                                    className="bg-transparent text-center font-bold text-xl w-full border-b border-white/10 focus:outline-none" 
-                                />
-                                {player.isDead && (
-                                    <div className="text-red-500 text-xs font-bold mt-1 flex justify-center items-center gap-1">
-                                    <Skull size={14}/> DEFEATED
-                                </div>
-                                )}
-                            </div>
-                            {/* Larger text size prevents iOS auto-zoom */}
                             <input 
-                                type="text" 
-                                placeholder="Search art..." 
+                                type="text" placeholder="Search art..." 
                                 onKeyDown={(e) => e.key === 'Enter' && searchCardArt(index, e.target.value)}
-                                className="w-full bg-black/40 p-3 rounded-xl text-base mb-4 focus:outline-none border border-white/5"
+                                className="w-full bg-black/40 p-3 rounded-xl text-base mb-4 border border-white/5"
                             />
 
+                            <div className="text-center mb-4">
+                                <input value={player.name} onChange={(e) => handleNameChange(index, e.target.value)} className="bg-transparent text-center font-bold text-xl w-full border-b border-white/10" />
+                                {player.isDead && <div className="text-red-500 text-xs font-bold mt-1 uppercase flex justify-center items-center gap-1"><Skull size={14}/> Defeated</div>}
+                            </div>
+
                             <div className="text-center mb-6">
-                                <span className="text-7xl font-black block mb-6 tracking-tighter">{player.life}</span>
-                                {/* Taller hit zones for thumbs (h-16) */}
+                                <span className="text-7xl font-black block mb-6 tracking-tighter tabular-nums">{player.life}</span>
                                 <div className="flex gap-2 h-16">
                                     <button onClick={() => adjustLife(index, -5)} className="flex-1 bg-red-900/40 rounded-xl font-bold">-5</button>
-                                    <button onClick={() => adjustLife(index, -1)} className="flex-1 bg-gray-800 rounded-xl font-bold text-lg">-1</button>
-                                    <button onClick={() => adjustLife(index, 1)} className="flex-1 bg-orange-600 rounded-xl font-bold text-lg">+1</button>
+                                    <button onClick={() => adjustLife(index, -1)} className="flex-1 bg-gray-800 rounded-xl font-bold">-1</button>
+                                    <button onClick={() => adjustLife(index, 1)} className="flex-1 bg-orange-600 rounded-xl font-bold">+1</button>
                                     <button onClick={() => adjustLife(index, 5)} className="flex-1 bg-green-900/40 rounded-xl font-bold">+5</button>
                                 </div>
+                            </div>
+
+                            {/* DISPLAY SECTION FOR COMMANDER DAMAGE (ADDED BACK) */}
+                            <div className="space-y-2 mb-4">
+                                {player.commanderDamage.map((dmg, sourceIdx) => (
+                                    sourceIdx !== index && dmg > 0 && (
+                                        <div key={sourceIdx} className="flex justify-between items-center bg-black/40 p-3 rounded-xl border border-white/5">
+                                            <span className="text-[10px] font-bold text-gray-400 uppercase">From P{sourceIdx + 1}</span>
+                                            <div className="flex items-center gap-4">
+                                                <button onClick={() => adjustCommanderDamage(index, sourceIdx, -1)} className="p-1 active:scale-150 text-red-400"><Minus size={16}/></button>
+                                                <span className="font-black text-orange-500 text-lg">{dmg}</span>
+                                                <button onClick={() => adjustCommanderDamage(index, sourceIdx, 1)} className="p-1 active:scale-150 text-green-400"><Plus size={16}/></button>
+                                            </div>
+                                        </div>
+                                    )
+                                ))}
                             </div>
 
                             {/* Counter Pills */}
@@ -160,43 +165,15 @@ export default function MTGLifeCalculator() {
                                     )
                                 ))}
                             </div>
-                            {/* Commander Damage Display */}
-<div className="space-y-2 mb-4">
-    {player.commanderDamage && player.commanderDamage.map((dmg, sourceIdx) => (
-        /* Only show if damage is from an opponent and greater than 0 */
-        sourceIdx !== index && dmg > 0 && (
-            <div key={sourceIdx} className="flex justify-between items-center text-xs bg-black/30 p-3 rounded-xl border border-white/5">
-                <span className="text-gray-400 font-bold uppercase tracking-tighter">
-                    From Player {sourceIdx + 1}
-                </span>
-                <div className="flex items-center gap-4">
-                    <button 
-                        onClick={() => adjustCommanderDamage(index, sourceIdx, -1)} 
-                        className="text-red-400 font-bold p-1 active:scale-125"
-                    >
-                        <Minus size={14} />
-                    </button>
-                    <span className="font-black text-orange-500 text-lg">{dmg}</span>
-                    <button 
-                        onClick={() => adjustCommanderDamage(index, sourceIdx, 1)} 
-                        className="text-green-400 font-bold p-1 active:scale-125"
-                    >
-                        <Plus size={14} />
-                    </button>
-                </div>
-            </div>
-        )
-    ))}
-</div>
 
                             <button 
                                 onClick={() => setActiveMenu(activeMenu === index ? null : index)}
                                 className="w-full bg-gray-800 py-4 rounded-xl text-xs font-black tracking-widest flex items-center justify-center gap-2"
                             >
-                                <ShieldAlert size={16}/> MANAGE COUNTERS
+                                <ShieldAlert size={16}/> Manage Counters
                             </button>
 
-                            {/* Mobile-friendly overlay menu */}
+                            {/* Overlay Menu */}
                             {activeMenu === index && (
                                 <div className="absolute inset-0 z-50 bg-gray-900/95 p-6 rounded-3xl grid grid-cols-2 gap-3 animate-in fade-in zoom-in duration-200">
                                     <button onClick={() => setActiveMenu(null)} className="col-span-2 text-xs font-bold text-gray-500 mb-2 uppercase tracking-widest">Close Menu</button>
@@ -205,7 +182,7 @@ export default function MTGLifeCalculator() {
                                     ))}
                                     {players.map((_, oppIdx) => (
                                         oppIdx !== index && (
-                                            <button key={oppIdx} onClick={() => { adjustCommanderDamage(index, oppIdx, 1); setActiveMenu(null); }} className="bg-orange-900/20 text-orange-400 border border-orange-500/20 p-4 rounded-xl text-[10px] font-bold uppercase">P{oppIdx + 1} Damage</button>
+                                            <button key={oppIdx} onClick={() => { adjustCommanderDamage(index, oppIdx, 1); setActiveMenu(null); }} className="bg-orange-900/20 text-orange-400 border border-orange-500/20 p-4 rounded-xl text-[10px] font-bold uppercase">P{oppIdx + 1} Dmg</button>
                                         )
                                     ))}
                                 </div>
